@@ -125,7 +125,7 @@ trait ThrottlesLogins
     /**
      * Remove special characters that may allow users to bypass rate limiting.
      *
-     * @param  string $key
+     * @param  string  $key
      * @return string
      */
     protected function removeSpecialCharacters($key)
