@@ -93,10 +93,42 @@ trait ThrottlesLogins
     }
 
     /**
+     * Get the rate limiter instance.
+     *
+     * @return \Illuminate\Cache\RateLimiter
+     */
+    protected function limiter()
+    {
+        return app(RateLimiter::class);
+    }
+
+    /**
+     * Get the maximum number of attempts to allow.
+     *
+     * @return int
+     */
+    public function maxAttempts()
+    {
+        return property_exists($this, 'maxAttempts') ? $this->maxAttempts : 5;
+    }
+
+    /**
+     * Get the number of minutes to throttle for.
+     *
+     * @return int
+     */
+    public function decayMinutes()
+    {
+        return property_exists($this, 'decayMinutes') ? $this->decayMinutes : 1;
+    }
+
+    /**
+     * Remove special characters that may allow users to bypass rate limiting.
+     *
      * @param  string $key
      * @return string
      */
-    protected function removeSpecialCharacters(string $key): string
+    protected function removeSpecialCharacters($key)
     {
         $values = [
             'ⓐ' => 'a',
@@ -170,35 +202,5 @@ trait ThrottlesLogins
         ];
 
         return strtr($key, $values);
-    }
-
-    /**
-     * Get the rate limiter instance.
-     *
-     * @return \Illuminate\Cache\RateLimiter
-     */
-    protected function limiter()
-    {
-        return app(RateLimiter::class);
-    }
-
-    /**
-     * Get the maximum number of attempts to allow.
-     *
-     * @return int
-     */
-    public function maxAttempts()
-    {
-        return property_exists($this, 'maxAttempts') ? $this->maxAttempts : 5;
-    }
-
-    /**
-     * Get the number of minutes to throttle for.
-     *
-     * @return int
-     */
-    public function decayMinutes()
-    {
-        return property_exists($this, 'decayMinutes') ? $this->decayMinutes : 1;
     }
 }
